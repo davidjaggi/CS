@@ -2,22 +2,27 @@ import pandas as pd
 import numpy as np
 
 import random
+import RandomWalk
 
 import matplotlib.pyplot as plt
+import statsmodels.api as sm
 # set seed so we have everytime the same output
 random.seed(7)
 
+'''
 # file = pd.read_csv("")
 rng = pd.date_range("1/1/2000",periods=1000, freq="H")
 rng[:5]
 ts = pd.Series(np.random.randn(len(rng)),index=rng)
+'''
 
+ts = RandomWalk.random_generator(1000)
 # Show the head of the file
 ts.head()
 
 # Plot the time series
-plt.plot(ts)
-plt.show()
+# plt.plot(ts)
+# plt.show()
 
 # Take hourly means
 ts.resample("H").mean()
@@ -51,11 +56,19 @@ test_stationarity(ts)
 
 # Take the log of the series to make it stationary
 ts_log = np.log(ts)
-plt.plot(ts_log)
-plt.show()
+# plt.plot(ts_log)
+# plt.show()
 
 # Create a moving average to smooth the series
 mavg12=ts.rolling(12).mean()
+'''
 plt.plot(ts)
 plt.plot(mavg12)
 plt.show()
+'''
+
+# Decompose the series with statsmodels
+decomp = sm.tsa.seasonal_decompose(ts, model ="additive")
+decomp.plot()
+plt.show()
+
